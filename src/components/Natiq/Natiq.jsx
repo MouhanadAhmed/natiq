@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import {Helmet} from "react-helmet";
+import Loading from '../../utils/Loading/Loading.jsx'
 
 export default function Natiq() {
   const audio = useRef();
@@ -18,83 +19,39 @@ export default function Natiq() {
   const [time,setTime]=useState();
   const [isFetching,setIsFetching]=useState(false);
   
-  
+    /**
+   * Link custom tag to render tooltip on hover  
+   * @param {*} id triggered by textarea
+   * @param {*} children the element to be associated with tooltip
+   * @param {*} title text for the tooltip
+   */
   const Link = ({ id, children, title }) => (
     <OverlayTrigger  placement="bottom"  overlay={<Tooltip id={id}>{title}</Tooltip>}>
       <span  >{children}</span>
     </OverlayTrigger>
   );
   
-  // function for handling the change event of the text area
+  /**
+   * InputHandler function validate if the input is in Arabic language then set the input state 
+   * @param {*} event triggered by textarea
+   */
   const inputHandler = (e) => {
-    // validate if the input is in Arabic language then set the input state 
     !(/^[\u0621-\u064A \n]+$/.test(e.target.value)) ? setInput('') : setInput(e.target.value);
-    console.log(e.target.value, typeof e.target.value);
   };
 
 
-
-  const callNatiq = useMutation({
-    mutationFn: async(data)=>{
-      setIsFetching(true);
-          return   axios
-          .post(`https://echo-6sdzv54itq-uc.a.run.app/natiq/`,
-          {
-            text:data?data:input
-          },
-          {
-            headers                         : {"Content-Type":"application/json"}
-          }).catch((err)=> {
-            console.log(err)
-            toast.error(err, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-              });
-          }) ;
-    },
-    onSuccess: (callNatiq) => {
-      console.log(callNatiq.data);
-                const decoded = callNatiq.data.wave.replaceAll(/_/g, '/').replaceAll(/-/g, '+');
-          // creating a new  HTMLAudioElement object from base64 data
-          let result =new Audio(`data:audio/ogg;base64,${decoded}`)
-          //  setAudio(result);
-           audio.current = result;
-
-          //send the last word start time to playAudio function to play it two extra times
-        playAudio(callNatiq.data.durations[callNatiq.data.durations.length-1][1]);
-        setIsFetching(false);
-    },
-    onError: (error) => {
-      setIsFetching(false);
-      console.log(error);
-      toast.error(`Please enter text`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        })
-    }
-  })
-
-  // const callNatiq = async () => {
-  //     try {
-  //       setIsFetching(true);
-  //       if (input.length !== 0) {
-  //         const response = await axios
+  /**
+   * callNatiq function to post text to the API using react-query and convert it to audio
+   * @param none
+   * @invoke callNatiq.mutate()
+   */
+  // const callNatiq = useMutation({
+  //   mutationFn: async()=>{
+  //     setIsFetching(true);
+  //         return   axios
   //         .post(`https://echo-6sdzv54itq-uc.a.run.app/natiq/`,
   //         {
-  //           text:input,
-  //           voice:"female"
+  //           text:input?input:"السلام عليكم"
   //         },
   //         {
   //           headers                         : {"Content-Type":"application/json"}
@@ -110,42 +67,99 @@ export default function Natiq() {
   //             progress: undefined,
   //             theme: "colored",
   //             });
-  //         });
-  //     // 💡 response of the mutation is passed to onSuccess
-  //         // console.log(response.data.durations[response.data.durations.length-1][1]);
-  //         // console.log(response.data.durations.length);
-  //         // converting urlsafe_b64 to base64 data 
-  //         const decoded = response.data.wave.replaceAll(/_/g, '/').replaceAll(/-/g, '+');
+  //         }) ;
+  //   },
+  //   onSuccess: (callNatiq) => {
+  //     // console.log(callNatiq.data);
+  //               const decoded = callNatiq.data.wave.replaceAll(/_/g, '/').replaceAll(/-/g, '+');
   //         // creating a new  HTMLAudioElement object from base64 data
   //         let result =new Audio(`data:audio/ogg;base64,${decoded}`)
   //         //  setAudio(result);
-  //         audio.current = result;
-  //         //  last word start time
-  //         setTime(response.data.durations[response.data.durations.length-1][1]);
-  //       playAudio();
-  //       setIsFetching(false);
-  //       }else{
-  //         // console.log("Please enter text");
-  //         toast.error('Please enter text', {
-  //           position: "top-right",
-  //           autoClose: 3000,
-  //           hideProgressBar: false,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //           theme: "colored",
-  //           });
-  //       setIsFetching(false);
+  //          audio.current = result;
 
-  //       }
-  //   }catch (error) {
-  //     console.log(error);
+  //         //send the last word start time to playAudio function to play it two extra times
+  //       playAudio(callNatiq.data.durations[callNatiq.data.durations.length-1][1]);
+  //       setIsFetching(false);
+  //   },
+  //   onError: (error) => {
   //     setIsFetching(false);
-
-  //     }
+  //     // console.log(error);
+  //     toast.error(`Please enter text`, {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //       })
   //   }
+  // })
 
+  const CallNatiq = async () => {
+      try {
+        setIsFetching(true);
+        if (input.length !== 0) {
+          const response = await axios
+          .post(`https://echo-6sdzv54itq-uc.a.run.app/natiq/`,
+          {
+            text:input,
+          },
+          {
+            headers                         : {"Content-Type":"application/json"}
+          }).catch((err)=> {
+            console.log(err)
+            toast.error(err, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
+          });
+      // 💡 response of the mutation is passed to onSuccess
+          // console.log(response.data.durations[response.data.durations.length-1][1]);
+          // console.log(response.data.durations.length);
+          // converting urlsafe_b64 to base64 data 
+          const decoded = response.data.wave.replaceAll(/_/g, '/').replaceAll(/-/g, '+');
+          // creating a new  HTMLAudioElement object from base64 data
+          let result =new Audio(`data:audio/ogg;base64,${decoded}`)
+          //  setAudio(result);
+          audio.current = result;
+          //  last word start time
+          playAudio(response.data.durations[response.data.durations.length-1][1]);
+        // playAudio();
+        setIsFetching(false);
+        }else{
+          // console.log("Please enter text");
+          toast.error('Please enter text', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+        setIsFetching(false);
+
+        }
+    }catch (error) {
+      console.log(error);
+      setIsFetching(false);
+
+      }
+    }
+
+    /**
+   * playAudio function to play the audio
+   * @param time  the staeting time of the last word to repeat it twice more, creating an echo
+   */
     const playAudio = (time)=>{
       audio.current.playbackRate= playBackRate;
       setTime(time);
@@ -161,6 +175,11 @@ export default function Natiq() {
                  played <=maxPlay && audio.current.play()
                }
     }
+
+   /**
+   * clearText function to clear the text input and pause the audio
+   * @param none
+   */
     const clearText =()=>{
       if(input)
     {
@@ -169,6 +188,10 @@ export default function Natiq() {
     }
     }
 
+   /**
+   * handlePlayBack function to change the playbackRate of the audio
+   * @param playBackRate
+   */
     const handlePlayBack = (playBackRate)=>{
       setPlayBackRate(playBackRate);
       if(input){
@@ -176,6 +199,10 @@ export default function Natiq() {
       }
     }
 
+   /**
+   * getFile function to check the text file content not empty
+   * @param event the input type file
+   */
     function getFile(event) {
       const input = event.target
       if ('files' in input && input.files.length > 0) {
@@ -185,6 +212,11 @@ export default function Natiq() {
       }
     }
     
+   /**
+   * placeFileContent function to place the text file content into the text area field
+   * @param target the text area field
+   * @param file   the uploaded file
+   */
     function placeFileContent(target, file) {
       readFileContent(file).then(content => {
         target.value = content
@@ -193,6 +225,10 @@ export default function Natiq() {
       }).catch(error => console.log(error))
     }
     
+   /**
+   * readFileContent function to process the text file content and check the status 
+   * @param file   the uploaded file
+   */
     function readFileContent(file) {
       const reader = new FileReader()
       return new Promise((resolve, reject) => {
@@ -202,6 +238,9 @@ export default function Natiq() {
       })
     }
 
+    if(isFetching){
+      return <Loading></Loading>
+    }
   return (
     <>
                 <Helmet>
@@ -230,18 +269,10 @@ export default function Natiq() {
      
 
       <div className={`col-md-2 position-relative ${styles.spacer}`}></div>
-      <button data-testid="echo" type="button" onClick={()=> callNatiq.mutate()} className={`  rounded rounded-circle bg-white p-4 shadow text-second ${styles.play}`}>{isFetching?<i className="fa-solid fa-circle-notch fa-spin fa-2xl"></i>    :<Link title="Echo" id="t-1"><i className="fa-solid fa-play fa-2xl"></i></Link>} </button>
+      <button data-testid="echo" type="button" onClick={()=> CallNatiq()} className={`  rounded rounded-circle bg-white p-4 shadow text-second ${styles.play}`}>{isFetching?<i className="fa-solid fa-circle-notch fa-spin fa-2xl"></i>    :<Link title="Echo" id="t-1"><i className="fa-solid fa-play fa-2xl"></i></Link>} </button>
    
      <div className="offset-md-2 col-md-4">
      <div className="d-flex justify-content-center align-items-center ">
-      {/* <Link title="Upload text (.txt)/ 10KB max" id="t-2">
-        
-      <button type="button" className={`btn rounded me-5 p-2 rounded-circle bg-white `} >
-      <i className="fa-solid fa-plus text-second fw-bold fa-xl"></i>
-      <input type="file" className="d-none" name="image"/>
-      </button>
-      </Link> */}
-
 <label className={` btn rounded me-5 p-2 rounded-circle bg-white ${styles.upload} `}>
 <Link title="Upload text (.txt)/ 10KB max" id="t-2">
 <i className="fa-solid fa-plus text-second fw-bold fa-xl"></i></Link> <input data-testid="uploadTxt" type="file" style={{"display": "none"}} onChange={(e)=> getFile(e)} name="image"/>

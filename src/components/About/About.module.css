@@ -1,9 +1,48 @@
 .main{
-    background: url('../../Assets/abouttxt.png');
-    background-position: center;
-    background-size: cover;
+    background            : url('../../Assets/abouttxt.png');
+    background-position   : center;
+    background-size       : cover;
     
 }
 .icon{
-    font-size: 3rem !important;
+    font-size             : 3rem !important;
+    transition            : all 0.4s linear ;
 }
+.icon:hover{
+    scale                 : 1.25;
+}
+
+.lines{
+    position: relative;
+    max-width: 500px;
+    margin: 100px auto;
+    text-align: center;
+  }
+  
+  .lines:before{
+    content:" ";
+    height: 2px;
+    width: 130px;
+    background: black;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+  }
+  
+  .lines:after{
+    content:" ";
+    height: 2px;
+    width: 130px;
+    background: black;
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+  }
+
+  @media screen and (max-width:576px) {
+    .lines:before,.lines:after{
+      width: 100px;
+    }
+  }

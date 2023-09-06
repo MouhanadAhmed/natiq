@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import Home from './Home.jsx';
-
+import { MemoryRouter } from 'react-router-dom';
 test("Main section render successfuly", () => {
-    render(<Home/>);
+    render(
+    <MemoryRouter>
+
+    <Home/>
+    </MemoryRouter>
+    );
 
     const element2 = screen.getByTestId('mainSec');
     expect(element2).toBeInTheDocument();
