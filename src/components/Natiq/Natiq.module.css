@@ -1,0 +1,73 @@
+.input{
+  caret-color: #1aae9f;
+}
+.input[dir="rtl"]   {
+  font-family: 'Cairo', sans-serif !important;
+  font-size: 2rem !important;
+}
+.counter{
+    position: absolute;
+    left: 0;
+    bottom: 20%;
+    font-size: 0.75rem;
+  }
+  .textBox{
+    width: 85% !important;
+  }
+
+  .controls{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -7.5%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: #07c6ae;
+    width: 75%;
+    /* padding-top: 0% !important;
+    padding-bottom: 0% !important; */
+  }
+
+  .play{
+    border:  0 !important;
+    position: absolute;
+    /* top: 0%; */
+    left: 45%;
+    /* right: 0; */
+    top: -15%;
+  }
+  @media screen and (max-width:576px) {
+    .play{
+      left: 4%;
+      padding: 1rem !important;
+      top: -10%;
+    }
+    .controls{
+      padding: 0.1rem 0 !important;
+      padding-left: 5rem !important;
+      width: 95% !important;
+      bottom: -20%;
+    }
+    .counter{
+      bottom: 5%;
+    }
+  }
+  @media screen and (max-width:768px) and (min-width: 576px) {
+    .controls{
+      /* padding: 0.1rem 0 !important;
+      padding-left: 5rem !important; */
+      width: 95% !important;
+      /* bottom: -20%; */
+    }
+    .upload{
+      margin-left: 5rem;
+      padding-left: 5rem;
+    }
+  }
+  .reset{
+    transition: all 0.5s linear ;
+  }
+.reset:hover{
+transform: rotate(390deg) !important;
+}

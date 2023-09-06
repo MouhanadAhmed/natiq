@@ -1,13 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+:root
+{
+    --main-color        : #121b74;
+    --light-color       : #1093a6;
+    --shadow            : rgba(145,158,171,.2) 0px 2px 4px -1px,rgba(145,158,171,.14) 0px 4px 5px 0px,rgba(145,158,171,.12) 0px 1px 10px 0px;
+    --font-family       : 'Open Sans', sans-serif;
+    --active-color      : #ff8a73;
+    --white-smoke       : #F2F2F2;
+    --steel             : #e0defd;
+    --primary-color     : #02021D;
+    --admin-green       : #07c6ae;
+    --icon              : #6ec1e4;
+}
+
+
+html[dir="rtl"]  body {
+  font-family: 'Cairo', sans-serif !important;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Montserrat', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url(./Assets/bottomRight.svg), url(./Assets/topLeft.svg);
+  background-repeat: no-repeat, no-repeat;
+  background-size: 80vh,110vh;
+  background-position:
+   bottom left , right ;
+     min-height: 100vh;
+
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+.text-main{
+  color                 : var(--main-color) !important;
+}
+.text-second{
+  color: var(--light-color) !important;
+}
+.bg-second{
+  background-color: var(--light-color)!important;
+}
+.text-icon{
+  color: var(--icon) !important;
+}
+textarea {
+  resize: none !important;
+}
+
+/* Start of  Resseting Bootstrap styling */
+.form-control{
+  background-color: #f1f1f1 !important;
+  border-color: transparent !important;
+  font-family: 'Cairo', sans-serif !important;
+  color: #121b74 !important;
+  font-size: 1.2rem !important;
+  font-weight: 400;
+}
+@media screen and (max-width:576px) {
+  .form-control{
+    background-color: white !important;
+}
+}
+.form-control:focus{
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.select-items {
+  position: absolute !important;
+  background-color: DodgerBlue !important;
+  top: -50%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+select{
+  border-radius: 15px !important;
+  color: white !important;
+  border-color: white !important;
+  background-color : var(--admin-green) !important;
+  /* position: relative !important; */
+}
+option{
+  /* position: absolute !important; */
+  /* top: -500% !important; */
+  background-color: white !important;
+  color: #02021D !important;
+  border-radius: 25px !important;
+}
+.nav-link:hover{
+  color: var(--active-color) !important;
+}
+.nav-link.active{
+  color: var(--main-color) !important;
+  font-weight: bolder;
+}
+/* End of  Resseting Bootstrap styling */
+Home{
+  background-image: none !important;
 }

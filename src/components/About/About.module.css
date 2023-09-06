@@ -1,0 +1,9 @@
+.main{
+    background: url('../../Assets/abouttxt.png');
+    background-position: center;
+    background-size: cover;
+    
+}
+.icon{
+    font-size: 3rem !important;
+}
